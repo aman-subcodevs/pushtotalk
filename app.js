@@ -11,16 +11,16 @@ app.get("/", function(req, res) {
 
 io.on("connection", function(socket) {
   Usercounter = Usercounter + 1;
-  io.emit("user", Usercounter);
+  socket.broadcast.emit("user", Usercounter);
   console.log("a user is connected");
   socket.on("disconnect", function() {
     Usercounter = Usercounter - 1;
-    io.emit("user", Usercounter);
+    socket.broadcast.emit("user", Usercounter);
     console.log("user disconnected");
   });
 
   socket.on("audioMessage", function(msg) {
-    io.emit("audioMessage", msg);
+    socket.broadcast.emit("audioMessage", msg);
   });
 });
 
