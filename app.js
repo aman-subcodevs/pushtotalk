@@ -20,6 +20,7 @@ io.on("connection", function(socket) {
   });
 
   socket.on("audioMessage", function(msg) {
+    console.log(msg)
     socket.broadcast.emit("audioMessage", msg);
   });
 });
