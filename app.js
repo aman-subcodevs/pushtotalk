@@ -1,7 +1,7 @@
 var app = require("express")();
 var http = require("http").Server(app);
 
-var io = require("socket.io")(http);
+var io = require("socket.io")(http); 
 
 var Usercounter = 0;
 
@@ -20,9 +20,11 @@ io.on("connection", function(socket) {
     console.log("user disconnected");
   });
 
-  socket.on("audioMessage", function(msg) {
+  socket.on("audioMessage", function(users) {
     console.log(msg);
-    socket.broadcast.emit("audioMessage", msg);
+    let to_users = users.to;
+    
+    socket.broadcast.to_users.emit("audioMessage", users.message);
   });
 });
 
