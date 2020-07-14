@@ -13,6 +13,7 @@ io.on("connection", function(socket) {
   Usercounter = Usercounter + 1;
   socket.broadcast.emit("user", Usercounter);
   console.log("a user is connected");
+  
   socket.on("disconnect", function() {
     Usercounter = Usercounter - 1;
     socket.broadcast.emit("user", Usercounter);
@@ -20,8 +21,7 @@ io.on("connection", function(socket) {
   });
 
   socket.on("audioMessage", function(msg) {
-    console.log(msg)
-    //io.emit("audioMessage", msg);
+    console.log(msg);
     socket.broadcast.emit("audioMessage", msg);
   });
 });
