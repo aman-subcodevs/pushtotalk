@@ -22,9 +22,12 @@ io.on("connection", function(socket) {
 
   socket.on("audioMessage", function(users) {
     console.log(users);
-    let to_users = users.to;
-    
-    socket.broadcast.to_users.emit("audioMessage", users.message);
+    let message  = users.message;
+    users.to.forEach(element => {
+      console.log(element);
+      socket.broadcast.to(element).emit("audioMessage", message);
+    });
+   
   });
 });
 
