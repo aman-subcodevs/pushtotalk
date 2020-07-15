@@ -33,7 +33,7 @@ io.on("connection", function(socket) {
   });
 
   socket.on("audioMessage", function(data) {
-    console.log(dada);
+    console.log(data);
    
     let message  = data.message;
     if(data.to.length === 1){
