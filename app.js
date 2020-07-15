@@ -2,6 +2,11 @@ var app = require("express")();
 var http = require("http").Server(app);
 
 var io = require("socket.io")(http); 
+io.attach(http, {
+  pingInterval: 10000,
+  pingTimeout: 5000,
+  cookie: false
+});
 
 var Usercounter = 0;
 sockets = [];
