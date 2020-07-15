@@ -45,8 +45,9 @@ io.on("connection", function(socket) {
       var receiver = people[receiverSocketId];
       console.log('receiver',receiverSocketId);
       var room = getARoom(people[socket.id], receiver);
-      console.log(room);
-      console.log(sockets);
+      //console.log(room);
+      //console.log(sockets);
+      socket.join(room);
       sockets[receiverSocketId].join(room);
       io.sockets.in(room).emit("audioMessage", message);
     }else{
@@ -66,8 +67,6 @@ io.on("connection", function(socket) {
 });
 
 function findUserById(name){
-  console.log(people);
-  console.log(name);
   for(socketId in people){
     if(people[socketId].element === name){
       return socketId;
@@ -78,7 +77,6 @@ function findUserById(name){
 
 //generate private room name for two users
 function getARoom(user1, user2){
-  console.log(user1); console.log(user2);
   return 'privateRooom' + user1.element + "And" + user2.element;
 }
 
