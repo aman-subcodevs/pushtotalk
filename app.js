@@ -50,7 +50,8 @@ io.on("connection", function(socket) {
       socket.join(room);
       console.log('sockets',sockets);
       console.log('sockets[receiverSocketId]',sockets[receiverSocketId]);
-      sockets[receiverSocketId].join(room);
+      //sockets[receiverSocketId].join(room);
+      io.sockets.connected[receiverSocketId].join(room);
       io.sockets.in(room).emit("audioMessage", message);
     }else{
       var room = "test";
