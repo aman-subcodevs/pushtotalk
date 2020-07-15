@@ -33,11 +33,11 @@ io.on("connection", function(socket) {
   });
 
   socket.on("audioMessage", function(data) {
-    console.log(data);
+    //console.log(data);
    
     let message  = data.message;
     if(data.to.length === 1){
-
+      console.log(data.to[0]);
       var receiverSocketId = findUserById(data.to[0]);
       console.log('receiverSocketId',receiverSocketId);
       var receiver = people[receiverSocketId];
