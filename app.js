@@ -52,7 +52,7 @@ io.on("connection", function(socket) {
      // console.log('sockets[receiverSocketId]',sockets[receiverSocketId]);
       //sockets[receiverSocketId].join(room);
       io.sockets.connected[receiverSocketId].join(room);
-      socket.broadcast.to(room).emit("audioMessage", message);
+      socket.to(room).emit("audioMessage", message);
     }else{
       var room = "test";
       data.to.forEach(element => {
