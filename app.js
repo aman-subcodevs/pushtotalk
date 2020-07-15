@@ -32,7 +32,8 @@ io.on("connection", function(socket) {
     
     users.to.forEach(element => {
       console.log(element);
-      io.sockets.in(element).emit("audioMessage", message);
+      socket.to(element).emit("audioMessage", message);
+      //io.sockets.in(element).emit("audioMessage", message);
      // io.to(element).emit("audioMessage", message);
       //socket.broadcast.to(element).emit("audioMessage", message);
     });
