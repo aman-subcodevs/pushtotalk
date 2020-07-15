@@ -18,10 +18,12 @@ io.on("connection", function(socket) {
   
 
   socket.on('join', function (data) {
+    console.log('join data',data);
     sockets.push(socket);
     data.user.forEach(element => {
       people[socket.id] = {element: element};
     })
+    console.log('people',people);
   });
   
   socket.on("disconnect", function() {
