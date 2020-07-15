@@ -39,7 +39,9 @@ io.on("connection", function(socket) {
     if(data.to.length === 1){
 
       var receiverSocketId = findUserById(data.to[0]);
+      console.log('receiverSocketId',receiverSocketId);
       var receiver = people[receiverSocketId];
+      console.log('receiver',receiverSocketId);
       var room = getARoom(people[socket.id], receiver);
       console.log(room);
       console.log(sockets);
@@ -62,6 +64,8 @@ io.on("connection", function(socket) {
 });
 
 function findUserById(name){
+  console.log(socketId);
+  console.log(name);
   for(socketId in people){
     if(people[socketId].element === name){
       return socketId;
