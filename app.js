@@ -60,7 +60,7 @@ io.on("connection", function(socket) {
 
 function findUserById(name){
   for(socketId in people){
-    if(people[socketId].name === name){
+    if(people[socketId].element === name){
       return socketId;
     }
   }
