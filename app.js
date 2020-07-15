@@ -47,12 +47,12 @@ io.on("connection", function(socket) {
       var room = getARoom(people[socket.id], receiver);
       //console.log(room);
       //console.log(sockets);
-      socket.join(room);
-      console.log('sockets',sockets);
-      console.log('sockets[receiverSocketId]',sockets[receiverSocketId]);
+      //socket.join(room);
+     // console.log('sockets',sockets);
+     // console.log('sockets[receiverSocketId]',sockets[receiverSocketId]);
       //sockets[receiverSocketId].join(room);
       io.sockets.connected[receiverSocketId].join(room);
-      io.sockets.in(room).emit("audioMessage", message);
+      socket.broadcast.to(room).emit("audioMessage", message);
     }else{
       var room = "test";
       data.to.forEach(element => {
