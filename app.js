@@ -45,12 +45,6 @@ io.on("connection", function(socket) {
       var receiver = people[receiverSocketId];
       console.log('receiver',receiverSocketId);
       var room = getARoom(people[socket.id], receiver);
-      //console.log(room);
-      //console.log(sockets);
-      //socket.join(room);
-     // console.log('sockets',sockets);
-     // console.log('sockets[receiverSocketId]',sockets[receiverSocketId]);
-      //sockets[receiverSocketId].join(room);
       io.sockets.connected[receiverSocketId].join(room);
       io.sockets.in(room).emit("audioMessage", message);
     }else{
@@ -58,7 +52,9 @@ io.on("connection", function(socket) {
       data.to.forEach(element => {
         console.log(element);
         var receiverSocketId = findUserById(element);
-        sockets[receiverSocketId].join(room);
+        if(receiverSocketId){
+          io.sockets.connected[receiverSocketId].join(room);
+        }
         //socket.to(element).emit("audioMessage", message);
        // io.sockets.to(element).emit("audioMessage", message);
        // io.to(element).emit("audioMessage", message);
