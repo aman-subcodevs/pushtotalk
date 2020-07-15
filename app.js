@@ -62,7 +62,9 @@ io.on("connection", function(socket) {
         console.log(element);
         var receiverSocketId = findUserById(element);
         if(receiverSocketId){
+          if(io.sockets.connected[receiverSocketId]){
           io.sockets.connected[receiverSocketId].join(room);
+          }
         }
         //socket.to(element).emit("audioMessage", message);
        // io.sockets.to(element).emit("audioMessage", message);
