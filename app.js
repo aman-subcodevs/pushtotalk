@@ -64,7 +64,7 @@ io.on("connection", function(socket) {
 });
 
 function findUserById(name){
-  console.log(socketId);
+  console.log(people);
   console.log(name);
   for(socketId in people){
     if(people[socketId].element === name){
