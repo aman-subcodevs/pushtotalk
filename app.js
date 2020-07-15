@@ -44,9 +44,9 @@ io.on("connection", function(socket) {
       io.sockets.in(room).emit("audioMessage", message);
     }else{
       var room = "test";
-      users.to.forEach(element => {
+      data.to.forEach(element => {
         console.log(element);
-        var receiverSocketId = findUserById(data.to[0]);
+        var receiverSocketId = findUserById(element);
         sockets[receiverSocketId].join(room);
         //socket.to(element).emit("audioMessage", message);
        // io.sockets.to(element).emit("audioMessage", message);
