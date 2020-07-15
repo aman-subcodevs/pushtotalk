@@ -38,7 +38,7 @@ io.on("connection", function(socket) {
     //console.log(data);
    
     let message  = data.message;
-    if(data.to.length === 1){
+    if(data.group){
       console.log(data.to[0]);
       var receiverSocketId = findUserById(data.to[0]);
       console.log('receiverSocketId',receiverSocketId);
@@ -48,7 +48,7 @@ io.on("connection", function(socket) {
       io.sockets.connected[receiverSocketId].join(room);
       io.sockets.in(room).emit("audioMessage", message);
     }else{
-      var room = "test";
+      var room = data.group_name;
       data.to.forEach(element => {
         console.log(element);
         var receiverSocketId = findUserById(element);
