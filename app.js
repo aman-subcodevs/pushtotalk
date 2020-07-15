@@ -27,10 +27,8 @@ io.on("connection", function(socket) {
   });
   
   socket.on("disconnect", function() {
-    Usercounter = Usercounter - 1;
-    //delete people[socket.id];
-    //sockets.splice(sockets.indexOf(socket), 1);
-    //socket.broadcast.emit("user", Usercounter);
+    delete people[socket.id];
+    sockets.splice(sockets.indexOf(socket), 1);
     console.log("user disconnected");
   });
 
