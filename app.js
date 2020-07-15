@@ -48,6 +48,8 @@ io.on("connection", function(socket) {
       //console.log(room);
       //console.log(sockets);
       socket.join(room);
+      console.log('sockets',sockets);
+      console.log('sockets[receiverSocketId]',sockets[receiverSocketId]);
       sockets[receiverSocketId].join(room);
       io.sockets.in(room).emit("audioMessage", message);
     }else{
