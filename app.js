@@ -59,11 +59,10 @@ io.on("connection", function(socket) {
     }else{
       var room = data.group_name;
       data.to.forEach(element => {
-        console.log(element);
         var receiverSocketId = findUserById(element);
         if(receiverSocketId){
           if(io.sockets.connected[receiverSocketId]){
-            console.log(receiverSocketId);
+            console.log(element);
           io.sockets.connected[receiverSocketId].join(room);
           }
         }
@@ -72,7 +71,7 @@ io.on("connection", function(socket) {
        // io.to(element).emit("audioMessage", message);
         //socket.broadcast.to(element).emit("audioMessage", message);
       });
-      io.sockets.in(room).emit("audioMessage", message);
+      socket.broadcast.to(room).emit("audioMessage", message);
     }
   });
 });
