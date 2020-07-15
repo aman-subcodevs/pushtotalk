@@ -37,7 +37,7 @@ io.on("connection", function(socket) {
    
     let message  = data.message;
     if(data.to.length === 1){
-      
+
       var receiverSocketId = findUserById(data.to[0]);
       var receiver = people[receiverSocketId];
       var room = getARoom(people[socket.id], receiver);
@@ -72,6 +72,7 @@ function findUserById(name){
 
 //generate private room name for two users
 function getARoom(user1, user2){
+  console.log(user1); console.log(user2);
   return 'privateRooom' + user1.element + "And" + user2.element;
 }
 
