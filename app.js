@@ -37,9 +37,12 @@ io.on("connection", function(socket) {
    
     let message  = data.message;
     if(data.to.length === 1){
+      
       var receiverSocketId = findUserById(data.to[0]);
       var receiver = people[receiverSocketId];
       var room = getARoom(people[socket.id], receiver);
+      console.log(room);
+      console.log(sockets);
       sockets[receiverSocketId].join(room);
       io.sockets.in(room).emit("audioMessage", message);
     }else{
