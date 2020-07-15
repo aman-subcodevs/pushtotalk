@@ -69,7 +69,7 @@ function findUserById(name){
 
 //generate private room name for two users
 function getARoom(user1, user2){
-  return 'privateRooom' + user1.name + "And" + user2.name;
+  return 'privateRooom' + user1.element + "And" + user2.element;
 }
 
 http.listen(3001, function() {
