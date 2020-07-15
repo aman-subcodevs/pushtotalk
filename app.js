@@ -33,7 +33,7 @@ io.on("connection", function(socket) {
   });
 
   socket.on("audioMessage", function(data) {
-    //console.log(data);
+    console.log(people);
    
     let message  = data.message;
     if(!data.group){
