@@ -15,7 +15,9 @@ io.on("connection", function(socket) {
   console.log("a user is connected");
 
   socket.on('join', function (data) {
-    socket.join(data.user); // We are using room of socket io
+    data.user.forEach(element => {
+      socket.join(element); // We are using room of socket io
+    })
   });
   
   socket.on("disconnect", function() {
@@ -27,12 +29,13 @@ io.on("connection", function(socket) {
   socket.on("audioMessage", function(users) {
     console.log(users);
     let message  = users.message;
-    io.sockets.in(users.to[0]).emit("audioMessage", message);
-    /*users.to.forEach(element => {
+    
+    users.to.forEach(element => {
       console.log(element);
-      io.to(element).emit("audioMessage", message);
+      io.sockets.in(element).emit("audioMessage", message);
+     // io.to(element).emit("audioMessage", message);
       //socket.broadcast.to(element).emit("audioMessage", message);
-    });*/
+    });
    
   });
 });
