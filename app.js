@@ -44,12 +44,15 @@ io.on("connection", function(socket) {
     if(!data.group){
       console.log(data.to[0]);
       var receiverSocketId = findUserById(data.to[0]);
-      console.log('receiverSocketId',receiverSocketId);
-      var receiver = people[receiverSocketId];
-      console.log('receiver',receiverSocketId);
-      var room = getARoom(people[socket.id], receiver);
-      io.sockets.connected[receiverSocketId].join(room);
-      io.sockets.in(room).emit("audioMessage", message);
+      if(receiverSocketId){
+        console.log('receiverSocketId',receiverSocketId);
+        var receiver = people[receiverSocketId];
+        console.log('receiver',receiverSocketId);
+        var room = getARoom(people[socket.id], receiver);
+        io.sockets.connected[receiverSocketId].join(room);
+        io.sockets.in(room).emit("audioMessage", message);
+      }
+     
     }else{
       var room = data.group_name;
       data.to.forEach(element => {
