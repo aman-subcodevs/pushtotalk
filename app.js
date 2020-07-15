@@ -36,7 +36,7 @@ io.on("connection", function(socket) {
     //console.log(data);
    
     let message  = data.message;
-    if(data.group){
+    if(!data.group){
       console.log(data.to[0]);
       var receiverSocketId = findUserById(data.to[0]);
       console.log('receiverSocketId',receiverSocketId);
