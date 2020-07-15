@@ -63,6 +63,7 @@ io.on("connection", function(socket) {
         var receiverSocketId = findUserById(element);
         if(receiverSocketId){
           if(io.sockets.connected[receiverSocketId]){
+            console.log(receiverSocketId);
           io.sockets.connected[receiverSocketId].join(room);
           }
         }
