@@ -49,8 +49,11 @@ io.on("connection", function(socket) {
         var receiver = people[receiverSocketId];
         console.log('receiver',receiverSocketId);
         var room = getARoom(people[socket.id], receiver);
+        if(io.sockets.connected[receiverSocketId]){
         io.sockets.connected[receiverSocketId].join(room);
         io.sockets.in(room).emit("audioMessage", message);
+        }
+       
       }
      
     }else{
