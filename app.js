@@ -69,6 +69,7 @@ io.on("connection", function(socket) {
        // io.to(element).emit("audioMessage", message);
         //socket.broadcast.to(element).emit("audioMessage", message);
       });
+      console.log(room);
       socket.broadcast.to(room).emit("audioMessage", message);
     }
   });
