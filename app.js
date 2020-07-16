@@ -42,12 +42,10 @@ io.on("connection", function(socket) {
    
     let message  = data.message;
     if(!data.group){
-      console.log(data.to[0]);
       var receiverSocketId = findUserById(data.to[0]);
       if(receiverSocketId){
         console.log('receiverSocketId',receiverSocketId);
         var receiver = people[receiverSocketId];
-        console.log('receiver',receiverSocketId);
         var room = getARoom(people[socket.id], receiver);
         if(io.sockets.connected[receiverSocketId]){
         io.sockets.connected[receiverSocketId].join(room);
@@ -58,11 +56,11 @@ io.on("connection", function(socket) {
      
     }else{
       var room = data.group_name;
+      console.log(data.to)
       data.to.forEach(element => {
         var receiverSocketId = findUserById(element);
         if(receiverSocketId){
           if(io.sockets.connected[receiverSocketId]){
-            console.log(element);
           io.sockets.connected[receiverSocketId].join(room);
           }
         }
@@ -75,7 +73,7 @@ io.on("connection", function(socket) {
     }
   });
 });
-  
+
 function findUserById(name){
   for(socketId in people){
     if(people[socketId].element === name){
