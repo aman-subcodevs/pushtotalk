@@ -36,8 +36,10 @@ io.on("connection", function(socket) {
   });
   
   socket.on("disconnect", function() {
+    console.log(people);
     delete people[socket.id];
     sockets.splice(sockets.indexOf(socket), 1);
+    console.log(people);
     console.log("user disconnected");
   });
 
