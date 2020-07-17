@@ -34,6 +34,10 @@ io.on("connection", function(socket) {
   socket.on("minimized", function(data) {
    console.log(data)
   });
+
+  socket.on('ping', function() {
+    socket.emit('pong');
+  });
   
   socket.on("disconnect", function() {
     console.log(people);
