@@ -36,6 +36,7 @@ io.on("connection", function(socket) {
   });
 
   socket.on('ping', function() {
+    console.log('ping');
     socket.emit('pong');
   });
   
