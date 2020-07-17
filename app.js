@@ -30,6 +30,10 @@ io.on("connection", function(socket) {
     })
     console.log('people',people);
   });
+
+  socket.on("minimized", function(data) {
+   console.log(data)
+  });
   
   socket.on("disconnect", function() {
     delete people[socket.id];
