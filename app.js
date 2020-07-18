@@ -1,3 +1,5 @@
+const { disconnect } = require("process");
+
 var app = require("express")();
 var http = require("http").Server(app);
 
@@ -11,6 +13,7 @@ io.attach(http, {
 var Usercounter = 0;
 sockets = [];
 people = {};
+disconnectUsers = {};
 
 app.get("/", function(req, res) {
   res.send({data:"success"});
@@ -46,6 +49,7 @@ io.on("connection", function(socket) {
     sockets.splice(sockets.indexOf(socket), 1);
     console.log(people);
     console.log("user disconnected");
+    socket.emit('rejoin');
   });
 
   socket.on("audioMessage", function(data) {
