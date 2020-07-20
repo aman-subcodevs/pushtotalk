@@ -7,9 +7,10 @@ const app = require("express")();
 const http = require("http").Server(app);
 const clinet = require('mongodb').MongoClient;
 const oneSignal = require('onesignal-node');
-
+const cors = require('cors')
 dotenv.config()
 
+app.use(cors())
 app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
