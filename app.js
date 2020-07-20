@@ -6,6 +6,7 @@ const { ObjectId } = require("mongodb")
 const app = require("express")();
 const http = require("http").Server(app);
 const clinet = require('mongodb').MongoClient;
+const oneSignal = require('onesignal-node');
 
 dotenv.config()
 
@@ -22,6 +23,8 @@ clinet.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, (err, c
 });
 
 let io = require("socket.io")(http);
+// const client = new oneSignal.Client('appId', 'apiKey');
+
 io.attach(http, {
   pingInterval: 10000,
   pingTimeout: 5000,
@@ -38,8 +41,8 @@ app.get("/", function (req, res) {
 });
 
 app.post("/login-user", async (req, res) => {
-  const { id, token, name } = req.body
-  const response = await usersCollection.replaceOne({ id }, { $set: { token, name } }, { upsert: true });
+  const { id, token, name, deviceType } = req.body
+  const response = await usersCollection.replaceOne({ id }, { $set: { token, name, deviceType } }, { upsert: true });
   if (response && response.upsertedId) {
     res.json({ success: true, _id: response.upsertedId._id, message: "User inserted successfully" })
   } else {
