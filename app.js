@@ -117,7 +117,7 @@ io.on("connection", function (socket) {
     socket.emit('rejoin');
   });
 
-  socket.on("audioMessage", function (data) {
+  socket.on("audioMessage", async function (data) {
     console.log(people);
     let message = data.message;
     if (!data.group) {
@@ -132,29 +132,44 @@ io.on("connection", function (socket) {
         } else {
           // query db with userId.
           // sendPushNotification to the token from database.
+          let id = data.to[0] && data.to[0].split("-")
+          const user = id && await usersCollection.findOne({ id });
+          user && sendPushNotification([user])
         }
       } else {
         // query db with userId.
         // sendPushNotification to the token from database.
+        let id = data.to[0] && data.to[0].split("-")
+        const user = id && await usersCollection.findOne({ id });
+        user && sendPushNotification([user])
       }
     } else {
       let room = data.group_name;
       console.log(data.to)
-      data.to.forEach(element => {
+      const users = []
+      data.to.forEach(async element => {
         let receiverSocketId = findUserById(element);
         if (receiverSocketId) {
           if (io.sockets.connected[receiverSocketId]) {
             io.sockets.connected[receiverSocketId].join(room);
           } else {
+            let id = data.to[0] && data.to[0].split("-")
+            const user = id && await usersCollection.findOne({ id });
+            users.push(user)
             // query db with userId.
             // sendPushNotification to the token from database.
           }
         } else {
           // query db with userId.
           // sendPushNotification to the token from database.
+          let id = data.to[0] && data.to[0].split("-")
+          const user = id && await usersCollection.findOne({ id });
+          users.push(user)
         }
       });
       console.log(room);
+      // sending push notification
+      sendPushNotification(users)
       socket.broadcast.to(room).emit("audioMessage", message);
     }
   });
