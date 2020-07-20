@@ -50,7 +50,7 @@ const sendPushNotification = async (users, audioUrl = "https://file-examples-com
     if (d.deviceType === "android") {
       androidTokens.push(d.token)
     }
-    if (d.deviceType === "ios") {
+    if (d.deviceType === "iOS") {
       iosTokens.push(d.token)
     }
   })
@@ -109,12 +109,11 @@ io.on("connection", function (socket) {
   });
 
   socket.on("disconnect", function () {
-    console.log(people);
+    console.log('user disconnected', 'socket.id', socket.id)
     delete people[socket.id];
     sockets.splice(sockets.indexOf(socket), 1);
-    console.log(people);
     console.log("user disconnected");
-    socket.emit('rejoin');
+    // socket.emit('rejoin');
   });
 
   socket.on("audioMessage", async function (data) {
@@ -136,7 +135,7 @@ io.on("connection", function (socket) {
           // query db with userId.
           // sendPushNotification to the token from database.
           let id = data.to[0] && data.to[0].split("-")[1]
-          const user = id && await usersCollection.findOne({ id });
+          const user = id && await usersCollection.findOne({ id: parseInt(id) });
           console.log('11111111', user);
           try {
             user && sendPushNotification([user])
@@ -149,7 +148,7 @@ io.on("connection", function (socket) {
         // query db with userId.
         // sendPushNotification to the token from database.
         let id = data.to[0] && data.to[0].split("-")[1]
-        const user = id && await usersCollection.findOne({ id });
+        const user = id && await usersCollection.findOne({ id: parseInt(id) });
         user && sendPushNotification([user])
       }
     } else {
@@ -163,7 +162,7 @@ io.on("connection", function (socket) {
             io.sockets.connected[receiverSocketId].join(room);
           } else {
             let id = element && element.split("-")[1]
-            const user = id && await usersCollection.findOne({ id });
+            const user = id && await usersCollection.findOne({ id: parseInt(id) });
             users.push(user)
             // query db with userId.
             // sendPushNotification to the token from database.
@@ -172,7 +171,7 @@ io.on("connection", function (socket) {
           // query db with userId.
           // sendPushNotification to the token from database.
           let id = element && element.split("-")[1]
-          const user = id && await usersCollection.findOne({ id });
+          const user = id && await usersCollection.findOne({ id: parseInt(id) });
           users.push(user)
         }
       });
