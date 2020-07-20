@@ -23,7 +23,7 @@ clinet.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, (err, c
 });
 
 let io = require("socket.io")(http);
-// const client = new oneSignal.Client('appId', 'apiKey');
+const client = new oneSignal.Client(process.env.OS_APP_ID, process.env.OS_APP_KEY);
 
 io.attach(http, {
   pingInterval: 10000,
@@ -39,6 +39,40 @@ disconnectUsers = {};
 app.get("/", function (req, res) {
   res.send({ data: "success" });
 });
+
+const sendPushNotification = async (users, audioUrl = "https://file-examples-com.github.io/uploads/2017/11/file_example_WAV_1MG.wav") => {
+
+  const androidTokens = []
+  const iosTokens = []
+
+  users.forEach(d => {
+    if (d.deviceType === "android") {
+      androidTokens.push(d.token)
+    }
+    if (d.deviceType === "ios") {
+      iosTokens.push(d.token)
+    }
+  })
+
+  const notification = {
+    contents: {
+      'en': 'Audio message',
+    },
+    data: {
+      audioUrl
+    },
+    include_android_reg_ids: androidTokens,
+    include_ios_tokens: iosTokens
+  };
+
+  client.createNotification(notification)
+    .then(response => {
+      console.log(response)
+    })
+    .catch(e => {
+      console.log(e)
+    });
+}
 
 app.post("/login-user", async (req, res) => {
   const { id, token, name, deviceType } = req.body
@@ -85,41 +119,41 @@ io.on("connection", function (socket) {
 
   socket.on("audioMessage", function (data) {
     console.log(people);
-
     let message = data.message;
     if (!data.group) {
-      var receiverSocketId = findUserById(data.to[0]);
+      let receiverSocketId = findUserById(data.to[0]);
       if (receiverSocketId) {
         console.log('receiverSocketId', receiverSocketId);
-        var receiver = people[receiverSocketId];
-        var room = getARoom(people[socket.id], receiver);
+        let receiver = people[receiverSocketId];
+        let room = getARoom(people[socket.id], receiver);
         if (io.sockets.connected[receiverSocketId]) {
           io.sockets.connected[receiverSocketId].join(room);
           io.sockets.in(room).emit("audioMessage", message);
         }
-
       }
-
     } else {
-      var room = data.group_name;
+      let room = data.group_name;
       console.log(data.to)
       data.to.forEach(element => {
-        var receiverSocketId = findUserById(element);
+        let receiverSocketId = findUserById(element);
         if (receiverSocketId) {
           if (io.sockets.connected[receiverSocketId]) {
             io.sockets.connected[receiverSocketId].join(room);
           }
         }
-        //socket.to(element).emit("audioMessage", message);
-        // io.sockets.to(element).emit("audioMessage", message);
-        // io.to(element).emit("audioMessage", message);
-        //socket.broadcast.to(element).emit("audioMessage", message);
+
       });
       console.log(room);
       socket.broadcast.to(room).emit("audioMessage", message);
     }
   });
 });
+
+// below if (receiverSocketId) {
+//socket.to(element).emit("audioMessage", message);
+// io.sockets.to(element).emit("audioMessage", message);
+// io.to(element).emit("audioMessage", message);
+//socket.broadcast.to(element).emit("audioMessage", message);
 
 function findUserById(name) {
   for (socketId in people) {
