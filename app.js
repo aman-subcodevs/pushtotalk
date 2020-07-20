@@ -132,14 +132,14 @@ io.on("connection", function (socket) {
         } else {
           // query db with userId.
           // sendPushNotification to the token from database.
-          let id = data.to[0] && data.to[0].split("-")
+          let id = data.to[0] && data.to[0].split("-")[1]
           const user = id && await usersCollection.findOne({ id });
           user && sendPushNotification([user])
         }
       } else {
         // query db with userId.
         // sendPushNotification to the token from database.
-        let id = data.to[0] && data.to[0].split("-")
+        let id = data.to[0] && data.to[0].split("-")[1]
         const user = id && await usersCollection.findOne({ id });
         user && sendPushNotification([user])
       }
@@ -153,7 +153,7 @@ io.on("connection", function (socket) {
           if (io.sockets.connected[receiverSocketId]) {
             io.sockets.connected[receiverSocketId].join(room);
           } else {
-            let id = data.to[0] && data.to[0].split("-")
+            let id = element && element.split("-")[1]
             const user = id && await usersCollection.findOne({ id });
             users.push(user)
             // query db with userId.
@@ -162,7 +162,7 @@ io.on("connection", function (socket) {
         } else {
           // query db with userId.
           // sendPushNotification to the token from database.
-          let id = data.to[0] && data.to[0].split("-")
+          let id = element && element.split("-")[1]
           const user = id && await usersCollection.findOne({ id });
           users.push(user)
         }
