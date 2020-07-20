@@ -38,8 +38,8 @@ app.get("/", function (req, res) {
 });
 
 app.post("/login-user", async (req, res) => {
-  const { _id, token, name } = req.body
-  const response = await usersCollection.replaceOne({ _id: ObjectId(_id) }, { $set: { token, name } }, { upsert: true });
+  const { id, token, name } = req.body
+  const response = await usersCollection.replaceOne({ id }, { $set: { token, name } }, { upsert: true });
   if (response && response.upsertedId) {
     res.json({ success: true, _id: response.upsertedId._id, message: "User inserted successfully" })
   } else {
