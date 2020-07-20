@@ -87,7 +87,7 @@ app.post("/login-user", async (req, res) => {
 io.on("connection", function (socket) {
   Usercounter = Usercounter + 1;
   socket.broadcast.emit("user", Usercounter);
-  console.log("a user is connected");
+  // console.log("a user is connected");
 
 
   socket.on('join', function (data) {
@@ -118,25 +118,34 @@ io.on("connection", function (socket) {
   });
 
   socket.on("audioMessage", async function (data) {
-    console.log(people);
     let message = data.message;
+    console.log('is group', data.group)
     if (!data.group) {
       let receiverSocketId = findUserById(data.to[0]);
+      console.log('receiverSocketId', receiverSocketId)
       if (receiverSocketId) {
-        console.log('receiverSocketId', receiverSocketId);
         let receiver = people[receiverSocketId];
+        console.log('receiver', receiver)
         let room = getARoom(people[socket.id], receiver);
         if (io.sockets.connected[receiverSocketId]) {
+          console.log('connected')
           io.sockets.connected[receiverSocketId].join(room);
           io.sockets.in(room).emit("audioMessage", message);
         } else {
+          console.log('not connected')
           // query db with userId.
           // sendPushNotification to the token from database.
           let id = data.to[0] && data.to[0].split("-")[1]
           const user = id && await usersCollection.findOne({ id });
-          user && sendPushNotification([user])
+          console.log('11111111', user);
+          try {
+            user && sendPushNotification([user])
+          } catch (err) {
+            console.log('ERROR 1111', err)
+          }
         }
       } else {
+        console.log('not found ....')
         // query db with userId.
         // sendPushNotification to the token from database.
         let id = data.to[0] && data.to[0].split("-")[1]
@@ -182,6 +191,7 @@ io.on("connection", function (socket) {
 //socket.broadcast.to(element).emit("audioMessage", message);
 
 function findUserById(name) {
+  console.log('name', name)
   for (socketId in people) {
     if (people[socketId].element === name) {
       return socketId;
@@ -192,6 +202,8 @@ function findUserById(name) {
 
 //generate private room name for two users
 function getARoom(user1, user2) {
+  console.log('user1', user1)
+  console.log('user2', user2)
   return 'privateRooom' + user1.element + "And" + user2.element;
 }
 
