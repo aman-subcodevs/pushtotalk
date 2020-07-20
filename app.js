@@ -66,13 +66,12 @@ const sendPushNotification = async (users, audioUrl = "https://file-examples-com
     include_ios_tokens: iosTokens
   };
 
-  client.createNotification(notification)
-    .then(response => {
-      console.log(response)
-    })
-    .catch(e => {
-      console.log(e)
-    });
+  try {
+    const resp = await client.createNotification(notification)
+    console.log('Push notifications sent succssfully');
+  } catch (err) {
+    console.log('Push notification err', err);
+  }
 }
 
 app.post("/login-user", async (req, res) => {
