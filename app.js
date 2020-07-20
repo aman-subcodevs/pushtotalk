@@ -155,7 +155,7 @@ io.on("connection", function (socket) {
       let room = data.group_name;
       console.log(data.to)
       const users = []
-      data.to.forEach(async element => {
+      await Promise.all(data.to.map(async element => {
         let receiverSocketId = findUserById(element);
         if (receiverSocketId) {
           if (io.sockets.connected[receiverSocketId]) {
@@ -164,21 +164,41 @@ io.on("connection", function (socket) {
             let id = element && element.split("-")[1]
             const user = id && await usersCollection.findOne({ id: parseInt(id) });
             users.push(user)
-            // query db with userId.
-            // sendPushNotification to the token from database.
           }
         } else {
-          // query db with userId.
-          // sendPushNotification to the token from database.
           let id = element && element.split("-")[1]
           const user = id && await usersCollection.findOne({ id: parseInt(id) });
           users.push(user)
         }
-      });
-      console.log(room);
+      })
+      console.log('here', users);
       // sending push notification
       sendPushNotification(users)
       socket.broadcast.to(room).emit("audioMessage", message);
+      // data.to.forEach(async element => {
+      //   let receiverSocketId = findUserById(element);
+      //   if (receiverSocketId) {
+      //     if (io.sockets.connected[receiverSocketId]) {
+      //       io.sockets.connected[receiverSocketId].join(room);
+      //     } else {
+      //       let id = element && element.split("-")[1]
+      //       const user = id && await usersCollection.findOne({ id: parseInt(id) });
+      //       users.push(user)
+      //       // query db with userId.
+      //       // sendPushNotification to the token from database.
+      //     }
+      //   } else {
+      //     // query db with userId.
+      //     // sendPushNotification to the token from database.
+      //     let id = element && element.split("-")[1]
+      //     const user = id && await usersCollection.findOne({ id: parseInt(id) });
+      //     users.push(user)
+      //   }
+      // });
+      // console.log(room);
+      // // sending push notification
+      // sendPushNotification(users)
+      // socket.broadcast.to(room).emit("audioMessage", message);
     }
   });
 });
