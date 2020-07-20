@@ -129,7 +129,13 @@ io.on("connection", function (socket) {
         if (io.sockets.connected[receiverSocketId]) {
           io.sockets.connected[receiverSocketId].join(room);
           io.sockets.in(room).emit("audioMessage", message);
+        } else {
+          // query db with userId.
+          // sendPushNotification to the token from database.
         }
+      } else {
+        // query db with userId.
+        // sendPushNotification to the token from database.
       }
     } else {
       let room = data.group_name;
@@ -139,9 +145,14 @@ io.on("connection", function (socket) {
         if (receiverSocketId) {
           if (io.sockets.connected[receiverSocketId]) {
             io.sockets.connected[receiverSocketId].join(room);
+          } else {
+            // query db with userId.
+            // sendPushNotification to the token from database.
           }
+        } else {
+          // query db with userId.
+          // sendPushNotification to the token from database.
         }
-
       });
       console.log(room);
       socket.broadcast.to(room).emit("audioMessage", message);
