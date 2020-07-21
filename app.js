@@ -81,7 +81,6 @@ app.post("/login-user", async (req, res) => {
 })
 
 io.use(function (socket, next) {
-  sockets.push(socket.id);
   people[socket.id] = {};
   totalUserCount++;
   socket.broadcast.emit("user", totalUserCount);
