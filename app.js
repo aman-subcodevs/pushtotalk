@@ -5,7 +5,7 @@ const app = require("express")();
 const http = require("http").Server(app);
 const mongoClient = require('mongodb').MongoClient;
 const oneSignal = require('onesignal-node');
-const cors = require('cors')
+const cors = require('cors');
 dotenv.config()
 
 app.use(cors())
@@ -84,6 +84,7 @@ io.use(function (socket, next) {
   people[socket.id] = {};
   totalUserCount++;
   socket.broadcast.emit("user", totalUserCount);
+  io.to(socket.id).emit("doJoin", {});
 	return next();
 });
 
@@ -97,6 +98,7 @@ io.on("connection", function (socket) {
   socket.on("disconnect", function () {
     console.log('user disconnected', people[socket.id]);
     delete people[socket.id];
+    totalUserCount--;
   });
 
   socket.on("audioMessage", async function (data) {
@@ -114,8 +116,8 @@ io.on("connection", function (socket) {
           // directly emit msg to the receiver
           io.to(receiverSocketId).emit("audioMessage", message);
         } else {
-          console.log('receiver connection status', io.sockets.connected[receiverSocketId])
-          console.log('sender connection status', io.sockets.connected[socket.id])
+          console.log('receiver connection status')
+          console.log('sender connection status')
           // send push notification to receiver
           let id = data.to[0] && data.to[0].split("-")[1]
           const user = id && await usersCollection.findOne({ id: parseInt(id) });
