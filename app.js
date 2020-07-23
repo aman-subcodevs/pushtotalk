@@ -114,18 +114,21 @@ io.on("connection", function (socket) {
         // check if receiver and sender are connected
         if (io.sockets.connected[receiverSocketId] && io.sockets.connected[socket.id]) {
           // directly emit msg to the receiver
-          io.to(receiverSocketId).emit("audioMessage", message);
+          let room = getARoom(people[receiverSocketId], people[socket.id])
+          io.sockets.connected[receiverSocketId].join(room);
+          io.sockets.in(room).emit("audioMessage", message);
+          // io.to(receiverSocketId).emit("audioMessage", message);
         } else {
-          console.log('receiver connection status')
-          console.log('sender connection status')
           // send push notification to receiver
           let id = data.to[0] && data.to[0].split("-")[1]
           const user = id && await usersCollection.findOne({ id: parseInt(id) });
+          console.log('sending push notifications to', user);
           user && sendPushNotification([user])
         }
       } else {
         // send push notification to receiver
         let id = data.to[0] && data.to[0].split("-")[1]
+        console.log('sending push notifications to', user);
         const user = id && await usersCollection.findOne({ id: parseInt(id) });
         user && sendPushNotification([user])
       }
@@ -169,11 +172,9 @@ function findUserById(name) {
 }
 
 //generate private room name for two users
-// function getARoom(user1, user2) {
-//   console.log('user1', user1)
-//   console.log('user2', user2)
-//   return 'privateRooom' + user1.element + "And" + user2.element;
-// }
+function getARoom(user1, user2) {
+  return 'privateRooom' + user1.element + "And" + user2.element;
+}
 
 http.listen(3001, function () {
   console.log("listening to port:3001");
