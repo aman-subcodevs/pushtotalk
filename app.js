@@ -81,20 +81,13 @@ app.post("/login-user", async (req, res) => {
 })
 
 io.use(function (socket, next) {
-  people[socket.id] = {};
+  people[socket.id] = { element: socket.handshake.query.userId };
   totalUserCount++;
-  socket.broadcast.emit("user", totalUserCount);
-  io.to(socket.id).emit("doJoin", {});
+  console.log('User connected', people[socket.id]);
 	return next();
 });
 
 io.on("connection", function (socket) {
-  socket.on('join', function (data) {
-    data.user.forEach(element => {
-      people[socket.id] = { element: element };
-    })
-  });
-
   socket.on("disconnect", function () {
     console.log('user disconnected', people[socket.id]);
     delete people[socket.id];
